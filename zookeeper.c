@@ -66,6 +66,8 @@ PyObject *err_to_exception(int errcode) {
     return OperationTimeoutException;
   case ZBADARGUMENTS:
     return BadArgumentsException;
+  case ZINVALIDSTATE:
+    return InvalidStateException;
   case ZAPIERROR:
     return ApiErrorException;
   case ZNONODE:
@@ -90,7 +92,6 @@ PyObject *err_to_exception(int errcode) {
     return InvalidCallbackException;
   case ZSESSIONMOVED:
     return SessionMovedException;
-      
   case ZOK:
   default:
     return NULL;
@@ -437,7 +438,7 @@ void watcher_dispatch(zhandle_t *zzh, int type, int state,
     PyErr_Print();
   }
   Py_DECREF(arglist);
-  if (pyw->permanent == 0 && (type != ZOO_SESSION_EVENT || is_unrecoverable(zzh) == ZINVALIDSTATE)) {   
+  if (pyw->permanent == 0 && (type != ZOO_SESSION_EVENT || state < 0)) {
     free_pywatcher(pyw);
   }
   PyGILState_Release(gstate);
