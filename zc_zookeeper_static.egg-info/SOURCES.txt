@@ -5,6 +5,7 @@ README.txt
 c.tgz
 get_source_files.py
 pyzk_docstrings.h
+setup.cfg
 setup.py
 source-release-instructions.txt
 zookeeper.c
